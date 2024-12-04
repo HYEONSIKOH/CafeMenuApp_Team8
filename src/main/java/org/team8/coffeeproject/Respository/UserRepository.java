@@ -6,5 +6,6 @@ import org.team8.coffeeproject.Entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    // SELECT * FROM user WHERE email = ?
     User findByEmail(String email);
 }
