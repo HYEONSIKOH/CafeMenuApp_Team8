@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.team8.coffeeproject.Enum.DeliveryState;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.List;
 @Table(name = "OrderList")
 public class OrderList {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,7 +27,7 @@ public class OrderList {
     @CreationTimestamp
     private Date createdAt;
 
-    private String state;
+    private DeliveryState state;
 
     @OneToMany(mappedBy = "orderList")
     private List<OrderItem> orderItems = new ArrayList<>();

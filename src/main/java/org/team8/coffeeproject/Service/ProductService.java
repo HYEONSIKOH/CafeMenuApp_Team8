@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class ListService {
+public class ProductService {
 
     private final ProductRepository listRepository;
 

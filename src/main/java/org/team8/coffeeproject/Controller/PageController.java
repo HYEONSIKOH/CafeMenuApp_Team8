@@ -21,8 +21,8 @@ public class PageController {
         return "order_ok";  // order_ok.jsp를 반환
     }
 
-    @RequestMapping("/test")
+    @RequestMapping("/admin")
     public String showTestPage(Model model) {
-        return "coffee";  // coffee.jsp 반환를 반환
+        return "admin";  // coffee.jsp 반환를 반환
     }
 }

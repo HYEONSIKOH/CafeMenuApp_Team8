@@ -9,12 +9,15 @@ import org.team8.coffeeproject.Entity.OrderItem;
 import org.team8.coffeeproject.Entity.OrderList;
 import org.team8.coffeeproject.Entity.Product;
 import org.team8.coffeeproject.Entity.User;
+import org.team8.coffeeproject.Enum.DeliveryState;
 import org.team8.coffeeproject.Respository.OrderItemRepository;
 import org.team8.coffeeproject.Respository.OrderListRepository;
 import org.team8.coffeeproject.Respository.ProductRepository;
 import org.team8.coffeeproject.Respository.UserRepository;
 
 import java.util.Map;
+
+import static java.lang.Integer.parseInt;
 
 @Service
 public class OrderService {
@@ -61,16 +64,19 @@ public class OrderService {
         // Order(주문) 생성
         OrderList orderList = new OrderList();
         orderList.setUser(user);
+        orderList.setState(DeliveryState.PENDING);
         orderListRepository.save(orderList);
 
         // Order(주문)에 대한 주문 상품 등록
         for (Map<String, Object> item : resDto.getItems()) {
-            String product_nm = (String) item.get("product_nm");
+            int productIdInt = parseInt(item.get("productId").toString());
             Integer quantity = (Integer) item.get("quantity");
+
+            Long productId = Long.valueOf(productIdInt);
 
             // System.out.println("product_nm : " + product_nm);
 
-            Product product = productRepository.findByProductNm(product_nm);
+            Product product = productRepository.findById(productId).get();
             if (product == null) {
                 return ResponseEntity.badRequest().body("[에러]: " + "No Product Id");
             }
