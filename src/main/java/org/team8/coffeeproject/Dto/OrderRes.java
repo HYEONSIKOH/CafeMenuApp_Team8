@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class OrderDtoRes {
+public class OrderRes {
     String email;
     String postal;
     String address;

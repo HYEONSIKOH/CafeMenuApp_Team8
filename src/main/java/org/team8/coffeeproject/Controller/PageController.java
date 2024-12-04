@@ -20,4 +20,9 @@ public class PageController {
     public String showOrderOk(Model model) {
         return "order_ok";  // order_ok.jsp를 반환
     }
+
+    @RequestMapping("/test")
+    public String showTestPage(Model model) {
+        return "coffee";  // coffee.jsp 반환를 반환
+    }
 }

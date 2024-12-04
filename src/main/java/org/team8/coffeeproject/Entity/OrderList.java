@@ -25,6 +25,8 @@ public class OrderList {
     @CreationTimestamp
     private Date createdAt;
 
+    private String state;
+
     @OneToMany(mappedBy = "orderList")
     private List<OrderItem> orderItems = new ArrayList<>();
 }

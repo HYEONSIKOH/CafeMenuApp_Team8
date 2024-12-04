@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.team8.coffeeproject.Dto.OrderDtoRes;
+import org.team8.coffeeproject.Dto.OrderRes;
 import org.team8.coffeeproject.Entity.OrderItem;
 import org.team8.coffeeproject.Entity.OrderList;
 import org.team8.coffeeproject.Entity.Product;
@@ -31,7 +31,7 @@ public class OrderService {
     private ProductRepository productRepository;
 
     @Transactional
-    public ResponseEntity<?> createOrder(OrderDtoRes resDto) {
+    public ResponseEntity<?> createOrder(OrderRes resDto) {
 
         // Email 기준으로 User 가입 확인 및 정보 조회
         String email = resDto.getEmail();
