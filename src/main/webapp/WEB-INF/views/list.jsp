@@ -1,123 +1,171 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%
-%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8"%>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Grid</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dynamic Product List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background: #ddd;
+        }
+
+        .card {
+            margin: auto;
+            max-width: 950px;
+            width: 90%;
+            box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            border-radius: 1rem;
+            border: transparent;
+        }
+
+        .summary {
+            background-color: #ddd;
+            border-top-right-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            padding: 4vh;
+            color: rgb(65, 65, 65);
+        }
+
+        @media (max-width: 767px) {
+            .summary {
+                border-top-right-radius: unset;
+                border-bottom-left-radius: 1rem;
+            }
+        }
+
+        .row {
             margin: 0;
-            padding: 0;
-            display: flex;
         }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            padding: 20px;
-            width: 70%;
+
+        img {
+            width: 3.5rem;
         }
-        .grid-item {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-            background-color: #f9f9f9;
-        }
-        .grid-item img {
-            max-width: 100%;
-            height: auto;
-        }
-        .grid-item p {
-            margin: 10px 0 0;
-        }
-        .selection-list {
-            width: 30%;
-            padding: 20px;
-            border-left: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-        }
-        .selection-list ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .selection-list li {
-            margin: 5px 0;
-        }
-        .done-button {
-            margin-top: auto;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .done-button:hover {
-            background-color: #45a049;
+
+        hr {
+            margin-top: 1.25rem;
         }
     </style>
 </head>
-<body>
-<div class="grid-container">
-    <div class="grid-item" data-name="Columbia Nariño">
-        <img src="./upload/img.jpg" alt="Columbia Nariño">
-        <p>Columbia Nariño</p>
-    </div>
-    <div class="grid-item" data-name="Brazil Serra Do Caparaó">
-        <img src="./upload/img.jpg" alt="Brazil Serra Do Caparaó">
-        <p>Brazil Serra Do Caparaó</p>
-    </div>
-    <div class="grid-item" data-name="Columbia Quindío">
-        <img src="./upload/img.jpg" alt="Columbia Quindío">
-        <p>Columbia Quindío</p>
-    </div>
-    <div class="grid-item" data-name="Ethiopia Sidamo">
-        <img src="./upload/img.jpg" alt="Ethiopia Sidamo">
-        <p>Ethiopia Sidamo</p>
-    </div>
+<body class="container-fluid">
+<div class="row justify-content-center m-4">
+    <h1 class="text-center">Product List</h1>
 </div>
-<div class="selection-list">
-    <h3>Selected Products</h3>
-    <ul id="selected-items"></ul>
-    <button class="done-button" onclick="completeSelection()">Done</button>
+<div class="card">
+    <div class="row">
+        <!-- Left: Product List -->
+        <div class="col-md-8 mt-4 d-flex flex-column align-items-start p-3 pt-0">
+            <h5 class="flex-grow-0"><b>상품 목록</b></h5>
+            <ul class="list-group products"></ul>
+        </div>
+
+        <!-- Right: Summary -->
+        <div class="col-md-4 summary p-4">
+            <h5><b>Summary</b></h5>
+            <hr>
+            <div class="product-summary"></div>
+            <div class="row pt-2 pb-2 border-top">
+                <h5 class="col">총금액</h5>
+                <h5 class="col text-end total-price">0원</h5>
+            </div>
+            <button class="btn btn-dark col-12">결제하기</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    document.querySelectorAll('.grid-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const productName = item.getAttribute('data-name');
-            const selectedItems = document.getElementById('selected-items');
+    document.addEventListener('DOMContentLoaded', function () {
+        fetchProducts();
 
-            // Add the product to the selected list
-            const listItem = document.createElement('li');
-            listItem.textContent = productName;
-            selectedItems.appendChild(listItem);
-        });
-    });
+        function fetchProducts() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8080/api/coffeeList'); // 서버의 상품 API 경로
+            xhr.onreadystatechange = function () {
+                if ((xhr.readyState === XMLHttpRequest.DONE) && xhr.status === 200) {
+                    const products = JSON.parse(xhr.responseText);
+                    renderProducts(products);
+                }
+            };
+            xhr.send();
+        }
 
-    function completeSelection() {
-        const selectedItems = Array.from(document.querySelectorAll('#selected-items li')).map(li => li.textContent);
+        function renderProducts(products) {
+            const productContainer = document.querySelector('.products');
 
-        // Send selected items to the server via AJAX
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'processSelection.jsp', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                // Redirect to another page
-                window.location.href = 'successPage.jsp';
+            productContainer.innerHTML = ''; // 초기화
+
+            products.forEach(product => {
+                const productItem = document.createElement('li');
+                productItem.className = 'list-group-item d-flex mt-2';
+                productItem.innerHTML = `
+            <div class="col-2">
+              <img class="img-fluid" src="`+ product['img'] +`" alt="`+ product['productNm'] +`">
+            </div>
+            <div class="col">
+              <div class="row text-muted">`+ product['description'] +`</div>
+              <div class="row">`+ product['productNm'] +`</div>
+            </div>
+            <div class="col text-center price">`+ product['price'] +`원</div>
+            <div class="col text-end action">
+              <button class="btn btn-small btn-outline-dark" data-product-id=" `+ product['productId'] +` ">추가</button> <!-- product_id에서 productId로 수정 -->
+            </div>
+          `;
+                productContainer.appendChild(productItem);
+            });
+
+            attachEventListeners();
+        }
+
+        function attachEventListeners() {
+            document.querySelectorAll('.action button').forEach(button => {
+                button.addEventListener('click', function () {
+                    const productId = this.getAttribute('data-product-id');
+                    addProductToSummary(productId);
+                });
+            });
+        }
+
+        function addProductToSummary(productId) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/api/product/${productId}`); // 상품 상세 정보 API 경로
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    const product = JSON.parse(xhr.responseText);
+                    updateSummary(product);
+                }
+            };
+            xhr.send();
+        }
+
+        function updateSummary(product) {
+            const summaryContainer = document.querySelector('.product-summary');
+            let summaryItem = summaryContainer.querySelector(`[data-product-id="${product.product_id}"]`);
+            if (summaryItem) {
+                const quantityBadge = summaryItem.querySelector('.badge');
+                quantityBadge.innerText = parseInt(quantityBadge.innerText) + 1;
             } else {
-                alert('Error processing selection');
+                const newItem = document.createElement('div');
+                newItem.className = 'row';
+                newItem.setAttribute('data-product-id', product.id);
+                newItem.innerHTML = `
+            <h6 class="p-0">${product.product_nm} <span class="badge bg-dark">1개</span></h6>
+          `;
+                summaryContainer.appendChild(newItem);
             }
-        };
-        xhr.send(JSON.stringify({ selectedItems }));
-    }
+
+            updateTotalPrice(product.price);
+        }
+
+        function updateTotalPrice(price) {
+            const totalPriceElement = document.querySelector('.total-price');
+            const currentTotal = parseInt(totalPriceElement.innerText.replace('원', '')) || 0;
+            totalPriceElement.innerText = (currentTotal + price) + '원';
+        }
+    });
 </script>
 </body>
 </html>
