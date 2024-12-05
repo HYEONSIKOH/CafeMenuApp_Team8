@@ -31,7 +31,7 @@
         </div>
         <!-- 요약 섹션 -->
         <div class="col-md-4 summary">
-            <h5><b>Summary</b></h5>
+            <h5><b>주문 목록</b></h5>
             <hr>
             <div id="summary-list">
                 <!-- 상품 요약 정보가 동적으로 추가됩니다. -->
@@ -93,7 +93,7 @@
                 listItem.className = "list-group-item d-flex align-items-center mt-2";
                 listItem.innerHTML = `
                     <div class="col-3">
-                        <img class="img-fluid" src="`+ product['img'] +`" alt="`+ product['productNm'] +`">
+                        <img class="img-fluid" style="width: 80px; height: 80px; border-radius: 5px; margin-right: 10px;" src="`+ product['img'] +`" alt="`+ product['productNm'] +`">
                     </div>
                     <div class="col-5">
                         <b>`+ product['productNm'] +`</b>

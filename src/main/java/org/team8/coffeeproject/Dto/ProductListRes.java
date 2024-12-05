@@ -3,8 +3,7 @@ package org.team8.coffeeproject.Dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Builder
 public class ProductListRes {
     private Long productId;

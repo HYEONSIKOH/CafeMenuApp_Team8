@@ -1,6 +1,7 @@
 package org.team8.coffeeproject.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

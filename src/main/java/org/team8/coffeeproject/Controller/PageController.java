@@ -1,12 +1,14 @@
 package org.team8.coffeeproject.Controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
 @Controller
+@CrossOrigin(origins = "*")
 public class PageController {
-    @RequestMapping("/list")
+    @RequestMapping("/")
     public String showList(Model model) {
         return "list";  // list.jsp를 반환
     }

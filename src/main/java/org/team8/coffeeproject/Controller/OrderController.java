@@ -8,6 +8,7 @@ import org.team8.coffeeproject.Service.OrderService;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     @Autowired

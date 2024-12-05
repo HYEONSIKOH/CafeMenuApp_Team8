@@ -1,13 +1,13 @@
 package org.team8.coffeeproject.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 // 한 주문에 포함되어 있는 상품들 리스트
 @Entity
-@Getter
-@Setter
+@Data
 public class OrderItem {
 
     @Id
