@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
 
 @Controller
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://221.149.143.92:8080/")
 public class PageController {
     @RequestMapping("/")
     public String showList(Model model) {

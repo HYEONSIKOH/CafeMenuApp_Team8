@@ -13,7 +13,6 @@ import java.util.List;
 //@Tag(name = "판매 상품 목록 조회")
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class ListController {
 
     private final ProductService productService;

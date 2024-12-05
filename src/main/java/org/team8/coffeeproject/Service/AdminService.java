@@ -59,7 +59,7 @@ public class AdminService {
         // 어제 14시 ~ 오늘 14시 Data 변수
         Calendar calendar = Calendar.getInstance();
 
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        calendar.add(Calendar.DAY_OF_MONTH, +1);
         calendar.set(Calendar.HOUR_OF_DAY, 14);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -70,7 +70,7 @@ public class AdminService {
         Date endTime = calendar.getTime();
         // ================================
 
-        List<OrderList> orderLists = orderListRepository.findOrderList14And14(startTime, endTime);
+        List<OrderList> orderLists = orderListRepository.findOrderList14And14(endTime, startTime);
         List<AdminOrderListRes> adminOrderListResList = new ArrayList<>();
 
         for (OrderList orderList : orderLists) {

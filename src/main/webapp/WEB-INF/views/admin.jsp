@@ -181,7 +181,7 @@
             const product = order.orderItems[0]['product'];
             const productLength = order.orderItems.length - 1;
             const productImg = product.img;
-            const orderId = order.orderId;
+            const orderId = order['orderId'];
             var productNm = product.productNm;
             const state = order.orderStatus === "PENDING" ? "배송 전" : "배송 중.."
             var sumPrice = 0;
@@ -232,7 +232,7 @@
         }
 
         // 서버로 POST 요청 보내기
-        fetch('http://localhost:8080/admin/changeOrderStatus', {
+        fetch('http://221.149.143.92:8080/admin/changeOrderStatus', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
