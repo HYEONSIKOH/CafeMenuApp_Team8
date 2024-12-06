@@ -61,8 +61,9 @@
     </div>
 </div>
 <script>
+    const URL = "http://220.76.86.103:8080"
     window.onload = function () {
-        const API_URL = "http://221.149.143.92:8080/api/coffeeList"; // 실제 API 경로로 변경 필요
+        const API_URL =  URL + "/api/coffeeList"; // 실제 API 경로로 변경 필요
         const productList = document.getElementById("product-list");
         const summaryList = document.getElementById("summary-list");
         const totalPriceElement = document.getElementById("total-price");
@@ -183,7 +184,7 @@
                 }
             };
             console.log(orderData);
-            orderRequest.open("POST", "/order/create", true);  // 실제 API 경로로 수정
+            orderRequest.open("POST", URL + "/order/create", true);  // 실제 API 경로로 수정
             orderRequest.setRequestHeader("Content-Type", "application/json");
             orderRequest.send(JSON.stringify(orderData));
         });

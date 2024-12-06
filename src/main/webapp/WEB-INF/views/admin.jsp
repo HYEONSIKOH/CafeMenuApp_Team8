@@ -156,9 +156,11 @@
 </div>
 
 <script>
+    const URL = "http://220.76.86.103:8080"
+
     // Ajax 요청 예제
     function showList() {
-        const API_URL = "http://221.149.143.92:8080/admin/todayOrderList";
+        const API_URL = URL + "/admin/todayOrderList";
 
         fetch(API_URL)
             .then(response => response.json())
@@ -177,27 +179,27 @@
         productContainer.innerHTML = ''; // 기존 리스트 초기화
 
         testData.forEach(order => {
-            const costomerMail = order.mail;
-            const product = order.orderItems[0]['product'];
             const productLength = order.orderItems.length - 1;
-            const productImg = product.img;
-            const orderId = order['orderId'];
-            var productNm = product.productNm;
-            const state = order.orderStatus === "PENDING" ? "배송 전" : "배송 중.."
-            var sumPrice = 0;
-            const checkboxeAble = order.orderStatus !== "PENDING" ? 'disabled' : '';
+            if (productLength >= 0) {
+                const costomerMail = order.mail;
+                const product = order.orderItems[0]['product'];
+                const productImg = product.img;
+                const orderId = order['orderId'];
+                var productNm = product.productNm;
+                const state = order.orderStatus === "PENDING" ? "배송 전" : "배송 중.."
+                var sumPrice = 0;
+                const checkboxeAble = order.orderStatus !== "PENDING" ? 'disabled' : '';
 
-            console.log(orderId)
 
-            for (var i = 0; i < productLength + 1; i++) {
-                sumPrice += order.orderItems[i]['product'].price * order.orderItems[i].quantity;
-            }
+                for (var i = 0; i < productLength + 1; i++) {
+                    sumPrice += order.orderItems[i]['product'].price * order.orderItems[i].quantity;
+                }
 
-            if (productLength > 0) {
-                productNm += ' 외 ' + productLength + '건';
-            }
+                if (productLength > 0) {
+                    productNm += ' 외 ' + productLength + '건';
+                }
 
-            const productItem = `
+                const productItem = `
         <li class="product-item">
           <img src="`+ productImg + `" alt="productNm">
           <div class="product-info">
@@ -210,7 +212,9 @@
             <input type="checkbox" id="`+ orderId + `"` + checkboxeAble + `>
           </div>
         </li>`;
-            productContainer.innerHTML += productItem;
+                productContainer.innerHTML += productItem;
+            }
+
         });
     }
 
@@ -232,7 +236,7 @@
         }
 
         // 서버로 POST 요청 보내기
-        fetch('http://221.149.143.92:8080/admin/changeOrderStatus', {
+        fetch( URL + "/admin/changeOrderStatus", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
