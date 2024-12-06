@@ -1,9 +1,7 @@
 package org.team8.coffeeproject.Respository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.team8.coffeeproject.Entity.OrderList;
 import org.team8.coffeeproject.Enum.DeliveryState;
@@ -13,19 +11,42 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderListRepository extends JpaRepository<OrderList, Long> {
-    Optional<OrderList> findById(Long orderId);
+public class OrderListRepository {
+    @PersistenceContext
+    private EntityManager em;
 
-    @Modifying
-    @Query("UPDATE OrderList o SET o.state = :state WHERE o.id IN :orderIds")
-    int updateStateByIds(@Param("state") DeliveryState state, @Param("orderIds") List<Long> orderIds);
+    public Optional<OrderList> findById(Long orderId) {
+        OrderList orderList = em.find(OrderList.class, orderId);
 
-    List<OrderList> findAll();
+        return Optional.ofNullable(orderList);
+    }
 
-    // 어제 14시부터 오늘 14시까지의 범위로 OrderList 조회
-    @Query("SELECT o FROM OrderList o WHERE o.createdAt BETWEEN :startTime AND :endTime")
-    List<OrderList> findOrderList14And14(
-            @Param("startTime") Date startTime,
-            @Param("endTime") Date endTime
-    );
+    public Integer updateStateByIds(DeliveryState state, List<Long> orderIds) {
+        Integer result = em.createQuery("UPDATE OrderList o SET o.state = :state WHERE o.id IN :orderIds")
+                .setParameter("state", state)
+                .setParameter("orderIds", orderIds)
+                .executeUpdate();
+
+        return result;
+    }
+
+    public List<OrderList> findAll(){
+        List<OrderList> orderLists = em.createQuery("select o from OrderList o", OrderList.class)
+                .getResultList();
+
+        return orderLists;
+    }
+
+    public List<OrderList> findOrderList14And14(Date startTime, Date endTime) {
+        List<OrderList> result = em.createQuery("SELECT o FROM OrderList o WHERE o.createdAt BETWEEN :startTime AND :endTime")
+                .setParameter("startTime", startTime)
+                .setParameter("endTime", endTime)
+                .getResultList();
+
+        return result;
+    }
+
+    public void save (OrderList orderList) {
+        em.persist(orderList);
+    }
 }

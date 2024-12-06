@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    private final ProductRepository listRepository;
+    private final ProductRepository productRepository;
 
     public List<ProductListRes> list(){
 
-        List<ProductListRes> productList = listRepository.findAll()
+        List<ProductListRes> productList = productRepository.findAll()
                 .stream()
                 .map(product->ProductListRes.builder()
                         .productId(product.getId())

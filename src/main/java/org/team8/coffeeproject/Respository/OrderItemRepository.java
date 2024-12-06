@@ -1,9 +1,17 @@
 package org.team8.coffeeproject.Respository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.team8.coffeeproject.Entity.OrderItem;
 
 @Repository
-public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+public class OrderItemRepository {
+
+    @PersistenceContext
+    private EntityManager em;
+
+    public void save(OrderItem orderItem) {
+        em.persist(orderItem);
+    }
 }
