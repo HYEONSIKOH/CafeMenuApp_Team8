@@ -1,5 +1,6 @@
 package org.team8.coffeeproject.Service;
 
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.team8.coffeeproject.Respository.ProductRepository;
 import org.team8.coffeeproject.Respository.UserRepository;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static java.lang.Integer.parseInt;
 
@@ -53,12 +55,11 @@ public class OrderService {
 
         User user = userRepository.findByEmail(userInfo.getEmail());
         if (user == null) {
-
-            user = new User();
-            user.setEmail(userInfo.getEmail());
-            user.setAddress(userInfo.getAddress());
-            user.setPostal(userInfo.getPostal());
-            userRepository.save(user);
+            User user1 = new User();
+            user1.setEmail(userInfo.getEmail());
+            user1.setAddress(userInfo.getAddress());
+            user1.setPostal(userInfo.getPostal());
+            userRepository.save(user1);
         }
 
         // Order(주문) 생성
