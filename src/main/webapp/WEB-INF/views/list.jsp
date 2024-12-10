@@ -17,7 +17,7 @@
 </head>
 <body class="container-fluid">
 <div class="row justify-content-center m-4">
-    <h1 class="text-center">Grids & Circle</h1>
+    <h1 class="text-center">Coffee MENU</h1>
 </div>
 <div class="card">
     <div class="row">
@@ -172,21 +172,35 @@
                     quantity: cart[productId].quantity
                 });
             });
-            // 서버로 주문 데이터 전송
-            const orderRequest = new XMLHttpRequest();
-            orderRequest.onreadystatechange = function () {
-                if (orderRequest.readyState === 4) {
-                    if (orderRequest.status === 200) {
-                        alert('주문이 완료되었습니다.');
-                    } else {
-                        alert('주문을 처리하는 데 실패했습니다.');
+
+            if (orderData.items.length === 0) {
+                alert("상품을 선택해주세요.");
+                return;
+            }
+
+            else if (email === "" || address === "" || postal === "") {
+                alert("배송 정보를 더 입력해주세요!");
+                return;
+            }
+
+            else {
+                // 서버로 주문 데이터 전송
+                const orderRequest = new XMLHttpRequest();
+                orderRequest.onreadystatechange = function () {
+                    if (orderRequest.readyState === 4) {
+                        if (orderRequest.status === 200) {
+                            alert('주문이 완료되었습니다.');
+                        } else {
+                            alert('주문을 처리하는 데 실패했습니다.');
+                        }
                     }
-                }
-            };
-            console.log(orderData);
-            orderRequest.open("POST", URL + "/order/create", true);  // 실제 API 경로로 수정
-            orderRequest.setRequestHeader("Content-Type", "application/json");
-            orderRequest.send(JSON.stringify(orderData));
+                };
+
+                console.log(orderData);
+                orderRequest.open("POST", URL + "/order/create", true);  // 실제 API 경로로 수정
+                orderRequest.setRequestHeader("Content-Type", "application/json");
+                orderRequest.send(JSON.stringify(orderData));
+            }
         });
     };
 </script>

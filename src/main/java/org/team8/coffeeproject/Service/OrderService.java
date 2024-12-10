@@ -54,13 +54,15 @@ public class OrderService {
 //        System.out.println("Items: " + lists);
 
         User user = userRepository.findByEmail(userInfo.getEmail());
+        System.out.println("User: " + userInfo.getEmail());
         if (user == null) {
-            User user1 = new User();
-            user1.setEmail(userInfo.getEmail());
-            user1.setAddress(userInfo.getAddress());
-            user1.setPostal(userInfo.getPostal());
-            userRepository.save(user1);
+            System.out.println("User: " + userInfo.getEmail());
+            user = new User();
+            user.setEmail(userInfo.getEmail());
+            user.setAddress(userInfo.getAddress());
+            user.setPostal(userInfo.getPostal());
         }
+        userRepository.save(user);
 
         // Order(주문) 생성
         OrderList orderList = new OrderList();

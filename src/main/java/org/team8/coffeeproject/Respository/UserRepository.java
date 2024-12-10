@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import org.team8.coffeeproject.Entity.User;
 import jakarta.persistence.NoResultException;
 
+import java.util.List;
+
 @Repository
 public class UserRepository {
     @PersistenceContext
